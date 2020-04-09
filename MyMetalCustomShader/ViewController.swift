@@ -55,12 +55,7 @@ class ViewController: UIViewController {
         makeTimeBuffer()
         
         // Make pipeline state
-        let library = device.makeDefaultLibrary()!
-        let descriptor = MTLRenderPipelineDescriptor()
-        descriptor.vertexFunction = library.makeFunction(name: "vertexShader")
-        descriptor.fragmentFunction = library.makeFunction(name: "fragmentShader")
-        descriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
-        renderPipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
+        makeRenderPipelineState()
         
         // Draw
         mtkView.setNeedsDisplay()
@@ -79,6 +74,15 @@ class ViewController: UIViewController {
     private func makeTimeBuffer() {
         let size = timeData.count * MemoryLayout<Float>.size
         timeBuffer = device.makeBuffer(bytes: timeData, length: size, options: [])
+    }
+    
+    private func makeRenderPipelineState() {
+        let library = device.makeDefaultLibrary()!
+        let descriptor = MTLRenderPipelineDescriptor()
+        descriptor.vertexFunction = library.makeFunction(name: "vertexShader")
+        descriptor.fragmentFunction = library.makeFunction(name: "fragmentShader")
+        descriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
+        renderPipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
     }
     
 }
