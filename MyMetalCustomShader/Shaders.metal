@@ -14,7 +14,7 @@ struct VertexInOut
     float4 position [[ position ]];
 };
 
-vertex VertexInOut vertexShader(device float4 *positions [[ buffer(0) ]], uint vid [[ vertex_id ]])
+vertex VertexInOut vertexShader(constant float4 *positions [[ buffer(0) ]], uint vid [[ vertex_id ]])
 {
     VertexInOut out;
     out.position = positions[vid];
