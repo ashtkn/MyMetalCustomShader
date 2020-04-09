@@ -25,6 +25,10 @@ class ViewController: UIViewController {
     
     private let timeData: [Float] = [0]
     
+    private let startDate: Date = Date()
+    
+    private var timer: Timer?
+    
     private let device = MTLCreateSystemDefaultDevice()!
     private var commandQueue: MTLCommandQueue!
     
@@ -39,26 +43,22 @@ class ViewController: UIViewController {
         didSet {
             mtkView.device = device
             mtkView.delegate = self
-            mtkView.enableSetNeedsDisplay = true
+            // mtkView.enableSetNeedsDisplay = true
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Setup Metal
         commandQueue = device.makeCommandQueue()!
-        
-        // Make buffer
+        makeBuffers()
+        makeRenderPipelineState()
+    }
+    
+    private func makeBuffers() {
         makeVertexBuffer()
         makeResolutionBuffer()
         makeTimeBuffer()
-        
-        // Make pipeline state
-        makeRenderPipelineState()
-        
-        // Draw
-        mtkView.setNeedsDisplay()
     }
     
     private func makeVertexBuffer() {
@@ -83,6 +83,26 @@ class ViewController: UIViewController {
         descriptor.fragmentFunction = library.makeFunction(name: "fragmentShader")
         descriptor.colorAttachments[0].pixelFormat = .bgra8Unorm
         renderPipelineState = try! device.makeRenderPipelineState(descriptor: descriptor)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let fps: Float = 30
+        timer = Timer.scheduledTimer(withTimeInterval: .init(1 / fps), repeats: true) { [weak self] timer in
+            self?.updateTimeBuffer()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        timer?.invalidate()
+    }
+    
+    private func updateTimeBuffer() {
+        let pTimeData = timeBuffer.contents()
+        let vTimeData = pTimeData.bindMemory(to: Float.self, capacity: 1 / MemoryLayout<Float>.stride)
+        vTimeData[0] = Float(Date().timeIntervalSince(startDate))
     }
     
 }
