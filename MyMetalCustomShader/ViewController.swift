@@ -11,24 +11,10 @@ import MetalKit
 
 class ViewController: UIViewController {
     
-    private let vertexData: [Float] = [
-        -1, -1, 0, 1,
-        1, -1, 0, 1,
-        -1,  1, 0, 1,
-        1,  1, 0, 1
-    ]
-    
-    private let resolutionData: [Float] = [
-        Float(UIScreen.main.nativeBounds.size.width),
-        Float(UIScreen.main.nativeBounds.size.height)
-    ]
-    
-    private let timeData: [Float] = [0]
-    
-    private let startDate: Date = Date()
-    
+    // For timer
     private var timer: Timer?
     
+    // For MetalKit
     private let device = MTLCreateSystemDefaultDevice()!
     private var commandQueue: MTLCommandQueue!
     
@@ -39,41 +25,43 @@ class ViewController: UIViewController {
     private var renderPipelineState: MTLRenderPipelineState!
     private let renderPassDescriptor = MTLRenderPassDescriptor()
     
-    @IBOutlet private weak var mtkView: MTKView!{
+    @IBOutlet private weak var mtkView: MTKView! {
         didSet {
             mtkView.device = device
             mtkView.delegate = self
-            // mtkView.enableSetNeedsDisplay = true
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Make command queue
         commandQueue = device.makeCommandQueue()!
-        makeBuffers()
-        makeRenderPipelineState()
-    }
-    
-    private func makeBuffers() {
+        
+        // Make buffers
         makeVertexBuffer()
         makeResolutionBuffer()
         makeTimeBuffer()
+        
+        // Make pipline
+        makeRenderPipelineState()
     }
     
     private func makeVertexBuffer() {
+        let vertexData = Store.default.vertexData
         let size = vertexData.count * MemoryLayout<Float>.size
         vertexBuffer = device.makeBuffer(bytes: vertexData, length: size)
     }
     
     private func makeResolutionBuffer() {
+        let resolutionData = Store.default.resolutionData
         let size = resolutionData.count * MemoryLayout<Float>.size
         resolutionBuffer = device.makeBuffer(bytes: resolutionData, length: size, options: [])
     }
     
     private func makeTimeBuffer() {
-        let size = timeData.count * MemoryLayout<Float>.size
-        timeBuffer = device.makeBuffer(bytes: timeData, length: size, options: [])
+        let size = MemoryLayout<Float>.size
+        timeBuffer = device.makeBuffer(length: size, options: [])
     }
     
     private func makeRenderPipelineState() {
@@ -89,20 +77,18 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         
         let fps: Float = 30
-        timer = Timer.scheduledTimer(withTimeInterval: .init(1 / fps), repeats: true) { [weak self] timer in
-            self?.updateTimeBuffer()
+        let startDate = Date()
+        timer = Timer.scheduledTimer(withTimeInterval: .init(1 / fps), repeats: true) { [weak self] _ in
+            guard let timeBuffer = self?.timeBuffer else { return }
+            let pTimeData = timeBuffer.contents()
+            let vTimeData = pTimeData.bindMemory(to: Float.self, capacity: 1 / MemoryLayout<Float>.stride)
+            vTimeData[0] = Float(Date().timeIntervalSince(startDate))
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         timer?.invalidate()
-    }
-    
-    private func updateTimeBuffer() {
-        let pTimeData = timeBuffer.contents()
-        let vTimeData = pTimeData.bindMemory(to: Float.self, capacity: 1 / MemoryLayout<Float>.stride)
-        vTimeData[0] = Float(Date().timeIntervalSince(startDate))
     }
     
 }

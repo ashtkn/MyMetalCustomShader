@@ -14,6 +14,7 @@
 		41C6BF6A243F0BBE0031A2EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 41C6BF69243F0BBE0031A2EC /* Assets.xcassets */; };
 		41C6BF6D243F0BBE0031A2EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 41C6BF6B243F0BBE0031A2EC /* LaunchScreen.storyboard */; };
 		41C6BF75243F0C490031A2EC /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 41C6BF74243F0C490031A2EC /* Shaders.metal */; };
+		41C6BF77243F20080031A2EC /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C6BF76243F20080031A2EC /* Store.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		41C6BF6C243F0BBE0031A2EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		41C6BF6E243F0BBE0031A2EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		41C6BF74243F0C490031A2EC /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		41C6BF76243F20080031A2EC /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				41C6BF60243F0BBA0031A2EC /* AppDelegate.swift */,
 				41C6BF62243F0BBA0031A2EC /* SceneDelegate.swift */,
 				41C6BF64243F0BBA0031A2EC /* ViewController.swift */,
+				41C6BF76243F20080031A2EC /* Store.swift */,
 				41C6BF74243F0C490031A2EC /* Shaders.metal */,
 				41C6BF66243F0BBA0031A2EC /* Main.storyboard */,
 				41C6BF69243F0BBE0031A2EC /* Assets.xcassets */,
@@ -142,6 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				41C6BF75243F0C490031A2EC /* Shaders.metal in Sources */,
+				41C6BF77243F20080031A2EC /* Store.swift in Sources */,
 				41C6BF65243F0BBA0031A2EC /* ViewController.swift in Sources */,
 				41C6BF61243F0BBA0031A2EC /* AppDelegate.swift in Sources */,
 				41C6BF63243F0BBA0031A2EC /* SceneDelegate.swift in Sources */,
