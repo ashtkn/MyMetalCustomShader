@@ -23,12 +23,14 @@ class ViewController: UIViewController {
         Float(UIScreen.main.nativeBounds.size.height)
     ]
     
+    private let timeData: [Float] = [0]
+    
     private let device = MTLCreateSystemDefaultDevice()!
     private var commandQueue: MTLCommandQueue!
     
     private var vertexBuffer: MTLBuffer!
     private var resolutionBuffer: MTLBuffer!
-    // private var timeBuffer: MTLBuffer!
+    private var timeBuffer: MTLBuffer!
     
     private var renderPipelineState: MTLRenderPipelineState!
     private let renderPassDescriptor = MTLRenderPassDescriptor()
@@ -50,6 +52,7 @@ class ViewController: UIViewController {
         // Make buffer
         makeVertexBuffer()
         makeResolutionBuffer()
+        makeTimeBuffer()
         
         // Make pipeline state
         let library = device.makeDefaultLibrary()!
@@ -73,6 +76,11 @@ class ViewController: UIViewController {
         resolutionBuffer = device.makeBuffer(bytes: resolutionData, length: size, options: [])
     }
     
+    private func makeTimeBuffer() {
+        let size = timeData.count * MemoryLayout<Float>.size
+        timeBuffer = device.makeBuffer(bytes: timeData, length: size, options: [])
+    }
+    
 }
 
 extension ViewController: MTKViewDelegate {
@@ -92,6 +100,7 @@ extension ViewController: MTKViewDelegate {
         renderEncoder.setRenderPipelineState(renderPipelineState)
         renderEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         renderEncoder.setFragmentBuffer(resolutionBuffer, offset: 0, index: 0)
+        renderEncoder.setFragmentBuffer(timeBuffer, offset: 0, index: 1)
 
         renderEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
         renderEncoder.endEncoding()

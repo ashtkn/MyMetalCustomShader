@@ -46,9 +46,8 @@ float voronoi(float2 p)
     return distanceToClosestFeaturePoint;
 }
 
-fragment float4 fragmentShader(VertexInOut in [[ stage_in ]], constant float2 &resolution [[ buffer(0) ]])
+fragment float4 fragmentShader(VertexInOut in [[ stage_in ]], constant float2 &resolution [[ buffer(0) ]], constant float &time [[ buffer(1) ]])
 {
-    float time = 100;
     float4 position = in.position;
     
     float2 uv = ( position.xy / resolution.xy ) * 2.0 - 1.0;
