@@ -21,6 +21,8 @@ vertex VertexInOut vertexShader(constant float4 *positions [[ buffer(0) ]], uint
     return out;
 }
 
+// Referring to: http://glslsandbox.com/e#36614.0
+
 float2 hash(float2 p)
 {
     float2x2 m = float2x2(13.85, 47.77, 99.41, 88.48);
